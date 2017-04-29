@@ -11,9 +11,9 @@ import PostgresStORM
 import JSONConfig
 import PerfectSessionPostgreSQL
 
-public func initializeSchema() -> [String:Any] {
+public func initializeSchema(_ fname: String = "./config/ApplicationConfiguration.json") -> [String:Any] {
 	var opts = [String:Any]()
-	if let config = JSONConfig(name: "./config/ApplicationConfiguration.json") {
+	if let config = JSONConfig(name: fname) {
 		let dict = config.getValues()!
 		opts["httpPort"] = dict["httpport"] as! Int
 		// StORM Connector Config

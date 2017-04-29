@@ -13,7 +13,7 @@ public func mainAuthenticationRoutes() -> [[String: Any]] {
 	var routes: [[String: Any]] = [[String: Any]]()
 
 	// WEB
-	routes.append(["method":"get", "uri":"/", "handler":LocalAuthWebHandlers.main])
+	routes.append(["method":"get", "uri":"/login", "handler":LocalAuthWebHandlers.main])
 	routes.append(["method":"post", "uri":"/login", "handler":LocalAuthWebHandlers.login])
 	routes.append(["method":"get", "uri":"/logout", "handler":LocalAuthWebHandlers.logout])
 

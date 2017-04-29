@@ -18,6 +18,7 @@ public class Account: PostgresStORM {
 	public var email		= ""
 	public var usertype: AccountType = .provisional
 	public var passvalidation = ""
+	public var detail			= [String:Any]()
 
 	let _r = URandom()
 
@@ -28,6 +29,9 @@ public class Account: PostgresStORM {
 		email           = this.data["email"] as? String				?? ""
 		usertype        = AccountType.from((this.data["usertype"] as? String)!)
 		passvalidation	= this.data["passvalidation"] as? String		?? ""
+		if let detailObj = this.data["detail"] {
+			self.detail = detailObj as? [String:Any] ?? [String:Any]()
+		}
 	}
 
 	public func rows() -> [Account] {
@@ -59,6 +63,18 @@ public class Account: PostgresStORM {
 		try? find(["passvalidation": validation])
 	}
 
+	public func makeID() {
+		id = _r.secureToken
+	}
+
+	public func makePassword(_ p1: String) {
+		if let digestBytes = p1.digest(.sha256),
+			let hexBytes = digestBytes.encode(.hex),
+			let hexBytesStr = String(validatingUTF8: hexBytes) {
+			password = hexBytesStr
+		}
+	}
+
 	// Register User
 	public static func register(_ u: String, _ e: String, _ ut: AccountType = .provisional, baseURL: String) -> OAuth2ServerError {
 		let r = URandom()
@@ -82,7 +98,7 @@ public class Account: PostgresStORM {
 
 		return .noError
 	}
-	
+
 	// Register User
 	public static func login(_ u: String, _ p: String) throws -> Account {
 		if let digestBytes = p.digest(.sha256),
@@ -105,7 +121,24 @@ public class Account: PostgresStORM {
 			throw OAuth2ServerError.loginError
 		}
 	}
-	
+
+	public static func listUsers() -> [[String: Any]] {
+		var users = [[String: Any]]()
+		let t = Account()
+		try? t.findAll()
+
+
+		for row in t.rows() {
+			var r = [String: Any]()
+			r["id"] = row.id
+			r["username"] = row.username
+			r["email"] = row.email
+			r["lastname"] = row.usertype
+			r["detail"] = row.detail
+			users.append(r)
+		}
+		return users
+	}
 
 
 }

@@ -42,6 +42,7 @@ extension LocalAuthWebHandlers {
 				template = "views/index"
 			}
 			response.render(template: template, context: context)
+			response.completed()
 		}
 	}
 

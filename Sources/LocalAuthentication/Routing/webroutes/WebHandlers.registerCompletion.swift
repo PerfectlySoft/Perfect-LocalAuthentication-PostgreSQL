@@ -36,19 +36,7 @@ extension LocalAuthWebHandlers {
 					if let p1 = request.param(name: "p1"), !(p1 as String).isEmpty,
 						let p2 = request.param(name: "p2"), !(p2 as String).isEmpty,
 						p1 == p2 {
-
-						if let digestBytes = p1.digest(.sha256),
-							let hexBytes = digestBytes.encode(.hex),
-							let hexBytesStr = String(validatingUTF8: hexBytes) {
-							print(hexBytesStr)
-							acc.password = hexBytesStr
-
-							//							let digestBytes2 = p1.digest(.sha256)
-							//							let hexBytes2 = digestBytes2?.encode(.hex)
-							//							let hexBytesStr2 = String(validatingUTF8: hexBytes2!)
-							//							print(hexBytesStr2)
-						}
-						//						acc.password = BCrypt.hash(password: p1)
+						acc.makePassword(p1)
 						acc.usertype = .standard
 						do {
 							try acc.save()

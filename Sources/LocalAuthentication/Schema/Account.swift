@@ -133,7 +133,7 @@ public class Account: PostgresStORM {
 			r["id"] = row.id
 			r["username"] = row.username
 			r["email"] = row.email
-			r["lastname"] = row.usertype
+			r["usertype"] = row.usertype
 			r["detail"] = row.detail
 			users.append(r)
 		}

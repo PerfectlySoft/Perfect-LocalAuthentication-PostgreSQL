@@ -29,6 +29,20 @@
 						<input type="text" name="email" class="hpl" value="{{email}}" required>
 					</div>
 				</div>
+
+
+				<div class="row">
+					<label class="mt hmb">User Type:</label>
+					<div class="col thirteen first">
+						<select name="usertype" class="hpl">
+							<option value="provisional">Provisional</option>
+							<option value="standard"{{usertypestandard}}>Standard</option>
+							<option value="admin"{{usertypeadmin}}>Admin</option>
+							<option value="inactive"{{usertypeinactive}}>Inactive</option>
+						</select>
+					</div>
+				</div>
+
 			</div>
 			<div class="col six last">
 

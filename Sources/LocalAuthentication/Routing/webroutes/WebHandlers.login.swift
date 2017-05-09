@@ -34,12 +34,12 @@ extension LocalAuthWebHandlers {
 				} catch {
 					context["msg_title"] = "Login Error."
 					context["msg_body"] = "Username or password incorrect"
-					template = "views/index"
+					template = "views/login"
 				}
 			} else {
 				context["msg_title"] = "Login Error."
 				context["msg_body"] = "Username or password not supplied"
-				template = "views/index"
+				template = "views/login"
 			}
 			response.render(template: template, context: context)
 			response.completed()

@@ -1,4 +1,4 @@
-# Perfect Local Authentication (PostgreSQL)
+# Perfect Local Authentication (PostgreSQL) [简体中文](README.zh_CN.md)
 
 [![Perfect logo](http://www.perfect.org/github/Perfect_GH_header_854.jpg)](http://perfect.org/get-involved.html)
 

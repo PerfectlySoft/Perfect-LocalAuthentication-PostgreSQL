@@ -80,11 +80,13 @@ public class Account: PostgresStORM {
 		let this = Account()
 		do {
 			try this.find(["email":email])
-			if this.results.foundSetCount > 0 {
-				throw OAuth2ServerError.registerError
+			if this.results.cursorData.totalRecords > 0 {
+				//				print("failing unique test")
+				throw OAuth2ServerError.invalidEmail
 			}
 		} catch {
-			print(error)
+			//			print(error)
+			throw OAuth2ServerError.invalidEmail
 		}
 	}
 
@@ -94,6 +96,7 @@ public class Account: PostgresStORM {
 		let acc = Account(r.secureToken, u, "", e, ut)
 		do {
 			try acc.isUnique()
+			//			print("passed unique test")
 			try acc.create()
 		} catch {
 			print(error)
@@ -180,3 +183,4 @@ public enum AccountType {
 		}
 	}
 }
+

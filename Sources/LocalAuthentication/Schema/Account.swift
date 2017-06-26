@@ -75,11 +75,25 @@ public class Account: PostgresStORM {
 		}
 	}
 
+	public func isUnique() throws {
+		// checks for email address already existing
+		let this = Account()
+		do {
+			try this.find(["email":email])
+			if this.results.foundSetCount > 0 {
+				throw OAuth2ServerError.registerError
+			}
+		} catch {
+			print(error)
+		}
+	}
+
 	// Register User
 	public static func register(_ u: String, _ e: String, _ ut: AccountType = .provisional, baseURL: String) -> OAuth2ServerError {
 		let r = URandom()
 		let acc = Account(r.secureToken, u, "", e, ut)
 		do {
+			try acc.isUnique()
 			try acc.create()
 		} catch {
 			print(error)

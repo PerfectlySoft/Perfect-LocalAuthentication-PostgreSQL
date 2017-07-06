@@ -19,9 +19,23 @@ extension LocalAuthJSONHandlers {
 		return {
 			request, response in
 			if let i = request.session?.userid, !i.isEmpty {
-				_ = try? response.setBody(json: ["msg":"Already logged in"])
-				response.completed()
-				return
+				let acc = Account()
+				do {
+					try acc.get(i)
+					_ = try? response.setBody(json: [
+						"userid":acc.id,
+						"username":acc.username,
+						"email":acc.email,
+						"usertype":"\(acc.usertype)",
+						"error":"Login Success",
+						"msg":"Already logged in"
+						])
+					response.completed()
+					return
+				} catch {
+					LocalAuthHandlers.error(request, response, error: "Login Failure", code: .badRequest)
+					return
+				}
 			}
 
 
@@ -34,7 +48,13 @@ extension LocalAuthJSONHandlers {
 						do{
 							let acc = try Account.login(u, p)
 							request.session?.userid = acc.id
-							_ = try response.setBody(json: ["error":"Login Success"])
+							_ = try response.setBody(json: [
+								"userid":acc.id,
+								"username":acc.username,
+								"email":acc.email,
+								"usertype":"\(acc.usertype)",
+								"error":"Login Success"
+								])
 							response.completed()
 							return
 						} catch {

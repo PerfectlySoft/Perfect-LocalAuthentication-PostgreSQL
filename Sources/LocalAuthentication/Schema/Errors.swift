@@ -9,4 +9,3 @@
 public enum OAuth2ServerError: Error {
 	case noError, registerError, loginError, invalidEmail
 }
-

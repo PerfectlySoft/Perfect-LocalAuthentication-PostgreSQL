@@ -23,9 +23,16 @@ public func mainAuthenticationRoutes() -> [[String: Any]] {
 	routes.append(["method":"post", "uri":"/registrationCompletion", "handler":LocalAuthWebHandlers.registerCompletion])
 
 	// JSON
+
+	/// Loads current session & csrf for headers
 	routes.append(["method":"get", "uri":"/api/v1/session", "handler":LocalAuthJSONHandlers.session])
+	/// Loads info about current user
+	routes.append(["method":"get", "uri":"/api/v1/me", "handler":LocalAuthJSONHandlers.me])
+	/// Ends current session
 	routes.append(["method":"get", "uri":"/api/v1/logout", "handler":LocalAuthJSONHandlers.logout])
+	/// Initiates registration process
 	routes.append(["method":"post", "uri":"/api/v1/register", "handler":LocalAuthJSONHandlers.register])
+	/// Login post route
 	routes.append(["method":"post", "uri":"/api/v1/login", "handler":LocalAuthJSONHandlers.login])
 
 

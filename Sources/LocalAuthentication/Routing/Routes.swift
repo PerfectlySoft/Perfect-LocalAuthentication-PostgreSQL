@@ -34,6 +34,8 @@ public func mainAuthenticationRoutes() -> [[String: Any]] {
 	routes.append(["method":"post", "uri":"/api/v1/register", "handler":LocalAuthJSONHandlers.register])
 	/// Login post route
 	routes.append(["method":"post", "uri":"/api/v1/login", "handler":LocalAuthJSONHandlers.login])
+	/// Change Password post route
+	routes.append(["method":"post", "uri":"/api/v1/changepassword", "handler":LocalAuthJSONHandlers.changePassword])
 
 
 

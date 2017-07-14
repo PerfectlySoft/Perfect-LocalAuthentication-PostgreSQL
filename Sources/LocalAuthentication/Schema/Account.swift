@@ -78,14 +78,15 @@ public class Account: PostgresStORM {
 	public func isUnique() throws {
 		// checks for email address already existing
 		let this = Account()
+		//		let thisUsername = Account()
 		do {
 			try this.find(["email":email])
 			if this.results.cursorData.totalRecords > 0 {
-//				print("failing unique test")
+				//				print("failing unique test")
 				throw OAuth2ServerError.invalidEmail
 			}
 		} catch {
-//			print(error)
+			//			print(error)
 			throw OAuth2ServerError.invalidEmail
 		}
 	}
@@ -96,7 +97,7 @@ public class Account: PostgresStORM {
 		let acc = Account(r.secureToken, u, "", e, ut)
 		do {
 			try acc.isUnique()
-//			print("passed unique test")
+			//			print("passed unique test")
 			try acc.create()
 		} catch {
 			print(error)
@@ -183,3 +184,4 @@ public enum AccountType {
 		}
 	}
 }
+

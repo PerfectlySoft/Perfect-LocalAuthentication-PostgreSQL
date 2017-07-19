@@ -17,6 +17,8 @@ public class Account: PostgresStORM {
 	public var password		= ""
 	public var email		= ""
 	public var usertype: AccountType = .provisional
+	public var source		= "local"	// local, facebook, etc
+	public var remoteid		= ""		// if oauth then the sourceid is stored here
 	public var passvalidation = ""
 	public var detail			= [String:Any]()
 
@@ -28,7 +30,9 @@ public class Account: PostgresStORM {
 		password        = this.data["password"] as? String			?? ""
 		email           = this.data["email"] as? String				?? ""
 		usertype        = AccountType.from((this.data["usertype"] as? String)!)
-		passvalidation	= this.data["passvalidation"] as? String		?? ""
+		source          = this.data["source"] as? String			?? "local"
+		remoteid        = this.data["remoteid"] as? String			?? ""
+		passvalidation	= this.data["passvalidation"] as? String	?? ""
 		if let detailObj = this.data["detail"] {
 			self.detail = detailObj as? [String:Any] ?? [String:Any]()
 		}
@@ -48,7 +52,15 @@ public class Account: PostgresStORM {
 		super.init()
 	}
 
-	public init(_ i: String = "", _ u: String, _ p: String = "", _ e: String, _ ut: AccountType = .provisional) {
+	public init(
+		_ i: String = "",
+		_ u: String,
+		_ p: String = "",
+		_ e: String,
+		_ ut: AccountType = .provisional,
+		_ s: String = "local",
+		_ rid: String = ""
+		) {
 		super.init()
 		id = i
 		username = u
@@ -56,6 +68,8 @@ public class Account: PostgresStORM {
 		email = e
 		usertype = ut
 		passvalidation = _r.secureToken
+		source = s
+		remoteid = rid
 	}
 
 	public init(validation: String) {
@@ -160,6 +174,8 @@ public class Account: PostgresStORM {
 			r["email"] = row.email
 			r["usertype"] = row.usertype
 			r["detail"] = row.detail
+			r["source"] = row.source
+			r["remoteid"] = row.remoteid
 			users.append(r)
 		}
 		return users

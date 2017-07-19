@@ -58,6 +58,11 @@ public func initializeSchema(_ fname: String = "./config/ApplicationConfiguratio
 	let a = Account()
 	try? a.setup()
 
+	// Account migrations:
+	// 1.3.1->1.4
+	let _ = try? a.sql("ALTER TABLE account ADD COLUMN \"source\" text;", params: [])
+	let _ = try? a.sql("ALTER TABLE account ADD COLUMN \"remoteid\" text;", params: [])
+
 	// Application
 	let app = Application()
 	try? app.setup()

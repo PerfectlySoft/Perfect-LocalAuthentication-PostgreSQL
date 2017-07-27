@@ -19,8 +19,15 @@ extension LocalAuthJSONHandlers {
 			for param in request.params() {
 				str.append("\(param.0)=\(param.1)")
 			}
+
+			let provider = request.urlVariables["provider"] ?? ""
+
+
+//			print("REDIRECTING TO: \(LocalAuthConfig.OAuthAppNameScheme)/\(provider)?\(str.joined(separator: "&"))")
+			//			print("REDIRECTING TO: oauth-swift://oauth-callback/facebook?\(str.joined(separator: "&"))")
 			response.status = .movedPermanently
-			response.setHeader(.location, value: "\(LocalAuthConfig.OAuthAppNameScheme)?\(str.joined(separator: "&"))")
+			//			response.setHeader(.location, value: "oauth-swift://oauth-callback/facebook?\(str.joined(separator: "&"))")
+			response.setHeader(.location, value: "\(LocalAuthConfig.OAuthAppNameScheme)/\(provider)?\(str.joined(separator: "&"))")
 			response.completed()
 		}
 	}

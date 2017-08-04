@@ -14,6 +14,7 @@ public class Application: PostgresStORM {
 	public var name				= ""
 	public var clientid			= ""
 	public var clientsecret		= ""
+	public var redirecturls		= [String]()
 
 
 	override public func to(_ this: StORMRow) {
@@ -21,6 +22,7 @@ public class Application: PostgresStORM {
 		name				= this.data["name"] as? String			?? ""
 		clientid			= this.data["clientid"] as? String		?? ""
 		clientsecret		= this.data["clientsecret"] as? String	?? ""
+		redirecturls		= toArrayString(this.data["redirecturls"] as? String ?? "")
 	}
 
 	public func rows() -> [Application] {

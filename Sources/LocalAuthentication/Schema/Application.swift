@@ -16,6 +16,14 @@ public class Application: PostgresStORM {
 	public var clientsecret		= ""
 	public var redirecturls		= [String]()
 
+	override public func setup(_ str: String = "") throws {
+		do {
+			try super.setup()
+			let _ = try sql("ALTER TABLE application ADD COLUMN redirecturls text", params: [])
+		} catch {
+			// nothing
+		}
+	}
 
 	override public func to(_ this: StORMRow) {
 		id					= this.data["id"] as? String			?? ""
@@ -35,3 +43,5 @@ public class Application: PostgresStORM {
 		return rows
 	}
 }
+
+

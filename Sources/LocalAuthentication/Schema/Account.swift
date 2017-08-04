@@ -181,16 +181,29 @@ public class Account: PostgresStORM {
 		return users
 	}
 
-
+	public func isAdmin() -> Bool {
+		switch usertype {
+		case .admin, .admin1, .admin2, .admin3:
+			return true
+		default:
+			return false
+		}
+	}
 }
 
 public enum AccountType {
-	case provisional, standard, admin, inactive
+	case provisional, standard, inactive, admin, admin1, admin2, admin3
 
 	public static func from(_ str: String) -> AccountType {
 		switch str {
 		case "admin":
 			return .admin
+		case "admin1":
+			return .admin1
+		case "admin2":
+			return .admin2
+		case "admin3":
+			return .admin3
 		case "standard":
 			return .standard
 		case "inactive":

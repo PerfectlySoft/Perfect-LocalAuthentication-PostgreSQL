@@ -19,10 +19,11 @@ public class Application: PostgresStORM {
 
 	let _r = URandom()
 
-	override public func setup(_ str: String = "") throws {
+	public static func setup(_ str: String = "") {
 		do {
-			try super.setup()
-			let _ = try sql("ALTER TABLE application ADD COLUMN redirecturls text", params: [])
+			let obj = Application()
+			try obj.setup(str)
+			let _ = try obj.sql("ALTER TABLE application ADD COLUMN redirecturls text", params: [])
 		} catch {
 			// nothing
 		}

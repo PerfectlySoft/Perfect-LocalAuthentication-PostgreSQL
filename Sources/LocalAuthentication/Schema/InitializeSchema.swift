@@ -49,28 +49,18 @@ public func initializeSchema(_ fname: String = "./config/ApplicationConfiguratio
 		PostgresConnector.password    = "perfect"
 		PostgresConnector.database    = "perfect_testing"
 		PostgresConnector.port        = 5432
-		
+
 	}
 
 //	StORMdebug = true
 
 	// Account
-	let a = Account()
-	try? a.setup()
+//	let a = Account()
+//	try? a.setup()
 
-	// Account migrations:
-	// 1.3.1->1.4
-	let _ = try? a.sql("ALTER TABLE account ADD COLUMN \"source\" text;", params: [])
-	let _ = try? a.sql("ALTER TABLE account ADD COLUMN \"remoteid\" text;", params: [])
-
-	// Application
-	let app = Application()
-	try? app.setup()
-
-	// Access Token
-	let at = AccessToken()
-	try? at.setup()
+	Account.setup()
 
 
 	return opts
 }
+

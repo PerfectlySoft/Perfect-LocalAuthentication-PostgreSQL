@@ -8,6 +8,7 @@
 
 import StORM
 import PostgresStORM
+import SwiftRandom
 
 public class Application: PostgresStORM {
 	public var id				= ""
@@ -16,6 +17,8 @@ public class Application: PostgresStORM {
 	public var clientsecret		= ""
 	public var redirecturls		= [String]()
 
+	let _r = URandom()
+
 	override public func setup(_ str: String = "") throws {
 		do {
 			try super.setup()
@@ -23,6 +26,10 @@ public class Application: PostgresStORM {
 		} catch {
 			// nothing
 		}
+	}
+
+	public func makeID() {
+		id = _r.secureToken
 	}
 
 	override public func to(_ this: StORMRow) {
@@ -43,5 +50,4 @@ public class Application: PostgresStORM {
 		return rows
 	}
 }
-
 

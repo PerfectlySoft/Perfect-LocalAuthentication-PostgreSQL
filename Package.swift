@@ -4,17 +4,17 @@ let package = Package(
     name: "Perfect-LocalAuthentication-PostgreSQL",
     targets: [
 		Target(
-			name: "LocalAuthentication",
+			name: "PerfectLocalAuthentication",
 			dependencies: []
 		)
 		],
     dependencies: [
-		.Package(url: "https://github.com/iamjono/JSONConfig.git", majorVersion: 1),
-		.Package(url: "https://github.com/PerfectlySoft/Perfect-RequestLogger.git", majorVersion: 1),
-		.Package(url: "https://github.com/PerfectlySoft/Perfect-SMTP", majorVersion: 1),
-		.Package(url: "https://github.com/SwiftORM/Postgres-StORM.git", majorVersion: 1),
-		.Package(url: "https://github.com/PerfectlySoft/Perfect-Session-PostgreSQL.git", majorVersion: 1),
-		.Package(url: "https://github.com/PerfectlySoft/Perfect-Mustache.git", majorVersion: 2),
+		.Package(url: "https://github.com/iamjono/JSONConfig.git", majorVersion: 3),
+		.Package(url: "https://github.com/PerfectlySoft/Perfect-RequestLogger.git", majorVersion: 3),
+		.Package(url: "https://github.com/PerfectlySoft/Perfect-SMTP", majorVersion: 3),
+		.Package(url: "https://github.com/SwiftORM/Postgres-StORM.git", majorVersion: 3),
+		.Package(url: "https://github.com/PerfectlySoft/Perfect-Session-PostgreSQL.git", majorVersion: 3),
+		.Package(url: "https://github.com/PerfectlySoft/Perfect-Mustache.git", majorVersion: 3),
 		]
 
 )

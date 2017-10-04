@@ -1,7 +1,7 @@
 import XCTest
-//@testable import AuthProviders
+@testable import PerfectLocalAuthentication
 
-class AuthProvidersTests: XCTestCase {
+class PerfectAuthenticationTests: XCTestCase {
 
 
 
@@ -12,7 +12,7 @@ class AuthProvidersTests: XCTestCase {
     }
 
 
-    static var allTests : [(String, (AuthProvidersTests) -> () throws -> Void)] {
+    static var allTests : [(String, (PerfectAuthenticationTests) -> () throws -> Void)] {
         return [
             ("testGitHub", testGitHub),
         ]

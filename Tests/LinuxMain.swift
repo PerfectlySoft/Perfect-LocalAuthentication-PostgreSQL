@@ -1,6 +1,6 @@
 import XCTest
-@testable import Perfect_AuthenticationTests
+@testable import PerfectAuthenticationTests
 
 XCTMain([
-     testCase(Perfect_AuthenticationTests.allTests),
+     testCase(PerfectAuthenticationTests.allTests),
 ])

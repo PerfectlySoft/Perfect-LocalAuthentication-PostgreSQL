@@ -25,6 +25,7 @@ extension LocalAuthJSONHandlers {
 						"userid":acc.id,
 						"username":acc.username,
 						"email":acc.email,
+                        "details":acc.detail,
 						"usertype":"\(acc.usertype)"
 						])
 					response.completed()

@@ -32,6 +32,11 @@ public func mainAuthenticationRoutes() -> [[String: Any]] {
 	routes.append(["method":"get", "uri":"/api/v1/logout", "handler":LocalAuthJSONHandlers.logout])
 	/// Initiates registration process
 	routes.append(["method":"post", "uri":"/api/v1/register", "handler":LocalAuthJSONHandlers.register])
+    /// Finalizes registration process
+    routes.append(["method":"post", "uri":"/api/v1/registerCompletion", "handler":LocalAuthJSONHandlers.registerCompletion])
+    /// Finalizes pass reset process
+    routes.append(["method":"post", "uri":"/api/v1/resetCompletion", "handler":LocalAuthJSONHandlers.resetPasswordCompletion])
+
 	/// Login post route
 	routes.append(["method":"post", "uri":"/api/v1/login", "handler":LocalAuthJSONHandlers.login])
 	/// Change Password post route

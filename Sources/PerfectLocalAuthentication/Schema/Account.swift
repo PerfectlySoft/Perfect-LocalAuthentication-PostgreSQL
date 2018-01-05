@@ -12,15 +12,17 @@ import SwiftRandom
 import PerfectSMTP
 
 public class Account: PostgresStORM {
-	public var id			= ""
-	public var username		= ""
-	public var password		= ""
-	public var email		= ""
+	public var id			  = ""
+	public var username		  = ""
+	public var password		  = ""
+	public var email		  = ""
 	public var usertype: AccountType = .provisional
-	public var source		= "local"	// local, facebook, etc
-	public var remoteid		= ""		// if oauth then the sourceid is stored here
+	public var source		  = "local"	// local, facebook, etc
+	public var remoteid		  = ""		// if oauth then the sourceid is stored here
 	public var passvalidation = ""
-	public var detail			= [String:Any]()
+    public var passreset      = ""
+
+	public var detail		  = [String:Any]()
 
 	let _r = URandom()
 
@@ -33,6 +35,7 @@ public class Account: PostgresStORM {
 			// 1.3.1->1.4
 			let _ = try? obj.sql("ALTER TABLE account ADD COLUMN source text;", params: [])
 			let _ = try? obj.sql("ALTER TABLE account ADD COLUMN remoteid text;", params: [])
+            let _ = try? obj.sql("ALTER TABLE account ADD COLUMN `passreset` text;", params: [])
 
 		} catch {
 			// nothing
@@ -48,6 +51,8 @@ public class Account: PostgresStORM {
 		source          = this.data["source"] as? String			?? "local"
 		remoteid        = this.data["remoteid"] as? String			?? ""
 		passvalidation	= this.data["passvalidation"] as? String	?? ""
+        passreset       = this.data["passreset"] as? String         ?? ""
+
 		if let detailObj = this.data["detail"] {
 			self.detail = detailObj as? [String:Any] ?? [String:Any]()
 		}
@@ -83,6 +88,7 @@ public class Account: PostgresStORM {
 		email = e
 		usertype = ut
 		passvalidation = _r.secureToken
+        passreset = _r.secureToken
 		source = s
 		remoteid = rid
 	}
@@ -91,6 +97,11 @@ public class Account: PostgresStORM {
 		super.init()
 		try? find(["passvalidation": validation])
 	}
+    
+    public init(reset: String) {
+        super.init()
+        try? find(["passreset": reset])
+    }
 
 	public func makeID() {
 		id = _r.secureToken
@@ -145,6 +156,34 @@ public class Account: PostgresStORM {
 
 		return .noError
 	}
+    
+    /// Reset Password
+    /// - Parameter e: email address
+    /// - Parameter baseURL: base url to create the reset pass url
+    public static func resetPassword(_ e: String, baseURL: String) -> OAuth2ServerError {
+        let r = URandom()
+        let acc = Account()
+        do {
+            try acc.find(["email": e])
+            acc.passreset = r.secureToken
+            acc.email = e
+            try acc.save()
+        } catch {
+            print(error)
+            return .invalidEmail
+        }
+        
+        var h = "<p>Forgotten password reset</p>"
+        h += "<p>You requested a new password <a href=\"\(baseURL)/verifyPassReset/\(acc.passreset)\">click here</a></p>"
+        h += "<p>If the link does not work copy and paste the following link into your browser:<br>\(baseURL)/resetPassword/\(acc.passreset)</p>"
+        
+        var t = "Forgotten password reset\n"
+        t += "You requested a new password, please click here: \(baseURL)/verifyPassReset/\(acc.passreset)"
+        
+        Utility.sendMail(name: "", address: e, subject: "Password reset request", html: h, text: t)
+        
+        return .noError
+    }
 
 	// Register User
 	public static func login(_ u: String, _ p: String) throws -> Account {

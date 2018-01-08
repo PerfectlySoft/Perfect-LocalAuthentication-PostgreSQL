@@ -8,7 +8,7 @@
 import PerfectHTTP
 import PerfectSession
 import PerfectCrypto
-import PerfectSessionMySQL
+import PerfectSessionPostgreSQL
 
 extension LocalAuthJSONHandlers {
     

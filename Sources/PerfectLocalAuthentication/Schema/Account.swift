@@ -35,7 +35,7 @@ public class Account: PostgresStORM {
 			// 1.3.1->1.4
 			let _ = try? obj.sql("ALTER TABLE account ADD COLUMN source text;", params: [])
 			let _ = try? obj.sql("ALTER TABLE account ADD COLUMN remoteid text;", params: [])
-            let _ = try? obj.sql("ALTER TABLE account ADD COLUMN `passreset` text;", params: [])
+            let _ = try? obj.sql("ALTER TABLE account ADD COLUMN passreset text;", params: [])
 
 		} catch {
 			// nothing

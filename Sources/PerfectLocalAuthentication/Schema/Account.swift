@@ -10,6 +10,7 @@ import StORM
 import PostgresStORM
 import SwiftRandom
 import PerfectSMTP
+import PerfectCrypto
 
 public class Account: PostgresStORM {
 	public var id			  = ""
@@ -107,12 +108,24 @@ public class Account: PostgresStORM {
 		id = _r.secureToken
 	}
 
+  public static func makeShadow(from: String) -> String? {
+    if let hashData = from.digest(.sha384) {
+      let hashKeyData:[UInt8] = hashData[0..<32].map {$0}
+      let ivData:[UInt8] = hashData[32..<48].map {$0}
+      let data:[UInt8] = from.utf8.map { $0 }
+      if let x = data.encrypt(.aes_128_cbc, key: hashKeyData, iv: ivData),
+        let y = x.encode(.base64),
+        let z = String(validatingUTF8: y) {
+        return z
+      }
+    }
+    return nil
+  }
+
 	public func makePassword(_ p1: String) {
-		if let digestBytes = p1.digest(.sha256),
-			let hexBytes = digestBytes.encode(.hex),
-			let hexBytesStr = String(validatingUTF8: hexBytes) {
-			password = hexBytesStr
-		}
+    if let shadow = Account.makeShadow(from: p1) {
+      password = shadow
+    }
 	}
 
 	public func isUnique() throws {
@@ -187,12 +200,9 @@ public class Account: PostgresStORM {
 
 	// Register User
 	public static func login(_ u: String, _ p: String) throws -> Account {
-		if let digestBytes = p.digest(.sha256),
-			let hexBytes = digestBytes.encode(.hex),
-			let hexBytesStr = String(validatingUTF8: hexBytes) {
-
+    if let shadow = Account.makeShadow(from: p)  {
 			let acc = Account()
-			let criteria = ["username":u,"password":hexBytesStr]
+			let criteria = ["username":u,"password":shadow]
 			do {
 				try acc.find(criteria)
 				if acc.usertype == .provisional {

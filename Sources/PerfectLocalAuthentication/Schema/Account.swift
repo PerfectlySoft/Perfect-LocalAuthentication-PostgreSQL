@@ -16,6 +16,7 @@ public class Account: PostgresStORM {
 	public var id			  = ""
 	public var username		  = ""
 	public var password		  = ""
+  public var salt = ""
 	public var email		  = ""
 	public var usertype: AccountType = .provisional
 	public var source		  = "local"	// local, facebook, etc
@@ -108,23 +109,12 @@ public class Account: PostgresStORM {
 		id = _r.secureToken
 	}
 
-  public static func makeShadow(from: String) -> String? {
-    if let hashData = from.digest(.sha384) {
-      let hashKeyData:[UInt8] = hashData[0..<32].map {$0}
-      let ivData:[UInt8] = hashData[32..<48].map {$0}
-      let data:[UInt8] = from.utf8.map { $0 }
-      if let x = data.encrypt(.aes_128_cbc, key: hashKeyData, iv: ivData),
-        let y = x.encode(.base64),
-        let z = String(validatingUTF8: y) {
-        return z
-      }
-    }
-    return nil
-  }
-
 	public func makePassword(_ p1: String) {
-    if let shadow = Account.makeShadow(from: p1) {
+    if let random = ([UInt8](randomCount: 16)).encode(.hex),
+    let salt = String(validatingUTF8: random),
+    let shadow = p1.encrypt(.aes_128_cbc, password: p1, salt: salt) {
       password = shadow
+      self.salt = salt
     }
 	}
 
@@ -200,22 +190,19 @@ public class Account: PostgresStORM {
 
 	// Register User
 	public static func login(_ u: String, _ p: String) throws -> Account {
-    if let shadow = Account.makeShadow(from: p)  {
-			let acc = Account()
-			let criteria = ["username":u,"password":shadow]
-			do {
-				try acc.find(criteria)
-				if acc.usertype == .provisional {
-					throw OAuth2ServerError.loginError
-				}
-				return acc
-			} catch {
-				print(error)
-				throw OAuth2ServerError.loginError
-			}
-		} else {
-			throw OAuth2ServerError.loginError
-		}
+    let acc = Account()
+    let criteria = ["username":u]
+    do {
+      try acc.find(criteria)
+      guard let pwd = acc.password.decrypt(.aes_128_cbc, password: p, salt: acc.salt),
+        pwd == p, acc.usertype != .provisional else {
+          throw OAuth2ServerError.loginError
+      }
+      return acc
+    } catch {
+      print(error)
+      throw OAuth2ServerError.loginError
+    }
 	}
 
 	public static func listUsers() -> [[String: Any]] {

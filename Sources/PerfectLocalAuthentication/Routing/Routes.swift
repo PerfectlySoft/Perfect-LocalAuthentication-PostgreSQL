@@ -6,8 +6,6 @@
 //
 //
 
-import PerfectHTTPServer
-
 public func mainAuthenticationRoutes() -> [[String: Any]] {
 
 	var routes: [[String: Any]] = [[String: Any]]()
@@ -41,12 +39,6 @@ public func mainAuthenticationRoutes() -> [[String: Any]] {
 	routes.append(["method":"post", "uri":"/api/v1/login", "handler":LocalAuthJSONHandlers.login])
 	/// Change Password post route
 	routes.append(["method":"post", "uri":"/api/v1/changepassword", "handler":LocalAuthJSONHandlers.changePassword])
-
-
-
-//	routes.append(["method":"get", "uri":"/**", "handler":PerfectHTTPServer.HTTPHandler.staticFiles,
-//	               "documentRoot":"./webroot",
-//	               "allowResponseFilters":true])
 
 	return routes
 }

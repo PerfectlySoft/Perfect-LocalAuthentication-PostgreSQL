@@ -112,21 +112,23 @@ public class Account: PostgresStORM {
 		}
 	}
 
-	public func isUnique() throws {
-		// checks for email address already existing
-		let this = Account()
-		//		let thisUsername = Account()
-		do {
-			try this.find(["email":email])
-			if this.results.cursorData.totalRecords > 0 {
-				//				print("failing unique test")
-				throw OAuth2ServerError.invalidEmail
-			}
-		} catch {
-			//			print(error)
-			throw OAuth2ServerError.invalidEmail
-		}
-	}
+    public func isUnique() throws {
+        // checks for username/email address already existing
+        
+        let this = Account()
+        //        let thisUsername = Account()
+        do {
+            try this.find(["email": email])
+            try this.find(["username": username])
+            if this.results.cursorData.totalRecords > 0 {
+                // print("failing unique test")
+                throw OAuth2ServerError.invalidEmail
+            }
+        } catch {
+            //            print(error)
+            throw OAuth2ServerError.invalidEmail
+        }
+    }
 
 	// Register User
 	public static func register(_ u: String, _ e: String, _ ut: AccountType = .provisional, baseURL: String) -> OAuth2ServerError {

@@ -119,7 +119,6 @@ public class Account: PostgresStORM {
         //        let thisUsername = Account()
         do {
             try this.find(["email": email])
-            try this.find(["username": username])
             if this.results.cursorData.totalRecords > 0 {
                 // print("failing unique test")
                 throw OAuth2ServerError.invalidEmail

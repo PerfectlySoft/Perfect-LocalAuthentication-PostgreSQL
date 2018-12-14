@@ -171,7 +171,7 @@ public class Account: PostgresStORM {
         
         var h = "<p>Forgotten password reset</p>"
         h += "<p>You requested a new password <a href=\"\(baseURL)/verifyPassReset/\(acc.passreset)\">click here</a></p>"
-        h += "<p>If the link does not work copy and paste the following link into your browser:<br>\(baseURL)/resetPassword/\(acc.passreset)</p>"
+        h += "<p>If the link does not work copy and paste the following link into your browser:<br>\(baseURL)/verifyPassReset/\(acc.passreset)</p>"
         
         var t = "Forgotten password reset\n"
         t += "You requested a new password, please click here: \(baseURL)/verifyPassReset/\(acc.passreset)"

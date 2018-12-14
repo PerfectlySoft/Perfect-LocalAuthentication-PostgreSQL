@@ -19,6 +19,8 @@ public func mainAuthenticationRoutes() -> [[String: Any]] {
 	routes.append(["method":"post", "uri":"/register", "handler":LocalAuthWebHandlers.registerPost])
 	routes.append(["method":"get", "uri":"/verifyAccount/{passvalidation}", "handler":LocalAuthWebHandlers.registerVerify])
 	routes.append(["method":"post", "uri":"/registrationCompletion", "handler":LocalAuthWebHandlers.registerCompletion])
+    routes.append(["method":"get", "uri":"/verifyPassReset/{passreset}", "handler": LocalAuthWebHandlers.resetPasswordVerify])
+    routes.append(["method":"post", "uri":"/registrationCompletion", "handler": LocalAuthJSONHandlers.resetPasswordCompletion])
 
 	// JSON
 

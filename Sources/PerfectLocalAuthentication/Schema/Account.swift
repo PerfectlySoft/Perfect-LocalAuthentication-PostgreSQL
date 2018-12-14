@@ -112,21 +112,22 @@ public class Account: PostgresStORM {
 		}
 	}
 
-	public func isUnique() throws {
-		// checks for email address already existing
-		let this = Account()
-		//		let thisUsername = Account()
-		do {
-			try this.find(["email":email])
-			if this.results.cursorData.totalRecords > 0 {
-				//				print("failing unique test")
-				throw OAuth2ServerError.invalidEmail
-			}
-		} catch {
-			//			print(error)
-			throw OAuth2ServerError.invalidEmail
-		}
-	}
+    public func isUnique() throws {
+        // checks for username/email address already existing
+        
+        let this = Account()
+        //        let thisUsername = Account()
+        do {
+            try this.find(["email": email])
+            if this.results.cursorData.totalRecords > 0 {
+                // print("failing unique test")
+                throw OAuth2ServerError.invalidEmail
+            }
+        } catch {
+            //            print(error)
+            throw OAuth2ServerError.invalidEmail
+        }
+    }
 
 	// Register User
 	public static func register(_ u: String, _ e: String, _ ut: AccountType = .provisional, baseURL: String) -> OAuth2ServerError {
@@ -170,7 +171,7 @@ public class Account: PostgresStORM {
         
         var h = "<p>Forgotten password reset</p>"
         h += "<p>You requested a new password <a href=\"\(baseURL)/verifyPassReset/\(acc.passreset)\">click here</a></p>"
-        h += "<p>If the link does not work copy and paste the following link into your browser:<br>\(baseURL)/resetPassword/\(acc.passreset)</p>"
+        h += "<p>If the link does not work copy and paste the following link into your browser:<br>\(baseURL)/verifyPassReset/\(acc.passreset)</p>"
         
         var t = "Forgotten password reset\n"
         t += "You requested a new password, please click here: \(baseURL)/verifyPassReset/\(acc.passreset)"

@@ -2,9 +2,9 @@
 import PackageDescription
 
 let package = Package(
-    name: "PerfectLocalAuthentication",
+    name: "Perfect-LocalAuthentication-PostgreSQL",
 	products: [
-		.library(name: "Perfect-LocalAuthentication-PostgreSQL", targets: ["PerfectLocalAuthentication"])
+		.library(name: "PerfectLocalAuthentication", targets: ["PerfectLocalAuthentication"])
 	],
     dependencies: [
 		.package(url: "https://github.com/iamjono/JSONConfig.git", from: "3.0.0"),

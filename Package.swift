@@ -2,9 +2,9 @@
 import PackageDescription
 
 let package = Package(
-    name: "Perfect-LocalAuthentication-PostgreSQL",
+    name: "PerfectLocalAuthentication",
 	products: [
-		.library(name: "Perfect-LocalAuthentication-PostgreSQL", targets: ["Perfect-LocalAuthentication-PostgreSQL"])
+		.library(name: "Perfect-LocalAuthentication-PostgreSQL", targets: ["PerfectLocalAuthentication"])
 	],
     dependencies: [
 		.package(url: "https://github.com/iamjono/JSONConfig.git", from: "3.0.0"),
@@ -16,7 +16,7 @@ let package = Package(
 		.package(url: "https://github.com/PerfectlySoft/Perfect-HTTP.git", from: "3.0.0"),
 	],
 	targets: [
-		.target(name: "Perfect-LocalAuthentication-", dependencies: [
+		.target(name: "PerfectLocalAuthentication", dependencies: [
 			"JSONConfig",
 			"PerfectRequestLogger",
 			"PerfectSMTP",

@@ -23,6 +23,9 @@ public class Account: PostgresStORM {
 
 	public var detail		  = [String:Any]()
 
+	// Introduce an array of permissions that can be populated with your own properties
+	public var _permissions		= [String]()
+
 	public static func setup(_ str: String = "") {
 		do {
 			let obj = Account()
@@ -94,7 +97,7 @@ public class Account: PostgresStORM {
 		super.init()
 		try? find(["passvalidation": validation])
 	}
-    
+
     public init(reset: String) {
         super.init()
         try? find(["passreset": reset])
@@ -114,7 +117,7 @@ public class Account: PostgresStORM {
 
     public func isUnique() throws {
         // checks for username/email address already existing
-        
+
         let this = Account()
         //        let thisUsername = Account()
         do {
@@ -153,7 +156,7 @@ public class Account: PostgresStORM {
 
 		return .noError
 	}
-    
+
     /// Reset Password
     /// - Parameter e: email address
     /// - Parameter baseURL: base url to create the reset pass url
@@ -168,16 +171,16 @@ public class Account: PostgresStORM {
             print(error)
             return .invalidEmail
         }
-        
+
         var h = "<p>Forgotten password reset</p>"
         h += "<p>You requested a new password <a href=\"\(baseURL)/verifyPassReset/\(acc.passreset)\">click here</a></p>"
         h += "<p>If the link does not work copy and paste the following link into your browser:<br>\(baseURL)/verifyPassReset/\(acc.passreset)</p>"
-        
+
         var t = "Forgotten password reset\n"
         t += "You requested a new password, please click here: \(baseURL)/verifyPassReset/\(acc.passreset)"
-        
+
         Utility.sendMail(name: "", address: e, subject: "Password reset request", html: h, text: t)
-        
+
         return .noError
     }
 

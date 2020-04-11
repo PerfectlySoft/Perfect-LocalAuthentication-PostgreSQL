@@ -20,7 +20,7 @@
 
 This package provides Local Authentication libraries for projects that require locally stored and handled authentication.
 
-Full documentation can be found at [http://www.perfect.org/docs/authentication.html](http://www.perfect.org/docs/authentication.html.html)
+Full documentation can be found at [http://www.perfect.org/docs/authentication.html](http://www.perfect.org/docs/authentication.html)
 
 A template application can be found at [https://github.com/PerfectlySoft/Perfect-Local-Auth-PostgreSQL-Template](https://github.com/PerfectlySoft/Perfect-Local-Auth-PostgreSQL-Template), providing a fully functional starting point, as well as demonstrating the usage of the system.
 

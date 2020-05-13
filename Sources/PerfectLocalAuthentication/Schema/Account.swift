@@ -9,11 +9,13 @@
 import StORM
 import PostgresStORM
 import PerfectSMTP
+import PerfectCrypto
 
 public class Account: PostgresStORM {
 	public var id			  = ""
 	public var username		  = ""
 	public var password		  = ""
+  public var salt = ""
 	public var email		  = ""
 	public var usertype: AccountType = .provisional
 	public var source		  = "local"	// local, facebook, etc
@@ -105,11 +107,12 @@ public class Account: PostgresStORM {
 	}
 
 	public func makePassword(_ p1: String) {
-		if let digestBytes = p1.digest(.sha256),
-			let hexBytes = digestBytes.encode(.hex),
-			let hexBytesStr = String(validatingUTF8: hexBytes) {
-			password = hexBytesStr
-		}
+    if let random = ([UInt8](randomCount: 16)).encode(.hex),
+    let salt = String(validatingUTF8: random),
+    let shadow = p1.encrypt(.aes_128_cbc, password: p1, salt: salt) {
+      password = shadow
+      self.salt = salt
+    }
 	}
 
     public func isUnique() throws {
@@ -183,25 +186,19 @@ public class Account: PostgresStORM {
 
 	// Register User
 	public static func login(_ u: String, _ p: String) throws -> Account {
-		if let digestBytes = p.digest(.sha256),
-			let hexBytes = digestBytes.encode(.hex),
-			let hexBytesStr = String(validatingUTF8: hexBytes) {
-
-			let acc = Account()
-			let criteria = ["username":u,"password":hexBytesStr]
-			do {
-				try acc.find(criteria)
-				if acc.usertype == .provisional {
-					throw OAuth2ServerError.loginError
-				}
-				return acc
-			} catch {
-				print(error)
-				throw OAuth2ServerError.loginError
-			}
-		} else {
-			throw OAuth2ServerError.loginError
-		}
+    let acc = Account()
+    let criteria = ["username":u]
+    do {
+      try acc.find(criteria)
+      guard let pwd = acc.password.decrypt(.aes_128_cbc, password: p, salt: acc.salt),
+        pwd == p, acc.usertype != .provisional else {
+          throw OAuth2ServerError.loginError
+      }
+      return acc
+    } catch {
+      print(error)
+      throw OAuth2ServerError.loginError
+    }
 	}
 
 	public static func listUsers() -> [[String: Any]] {

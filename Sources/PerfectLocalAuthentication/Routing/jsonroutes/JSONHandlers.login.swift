@@ -49,6 +49,8 @@ extension LocalAuthJSONHandlers {
 							let acc = try Account.login(u, p)
 							request.session?.userid = acc.id
 							_ = try response.setBody(json: [
+								"authorization": response.request.session?.token,
+								"csrf": response.request.session?.data["csrf"],
 								"userid":acc.id,
 								"username":acc.username,
 								"email":acc.email,
